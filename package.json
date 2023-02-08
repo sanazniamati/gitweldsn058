@@ -1,5 +1,5 @@
 {
-  "name": "projectrk084",
+  "name": "projectrk059",
   "description": "React Konva redo undo",
   "version": "0.1.0",
   "keywords": [
@@ -8,6 +8,7 @@
     "konva"
   ],
   "dependencies": {
+    "i": "^0.3.7",
     "konva": "8.3.11",
     "react": "18.0.0",
     "react-dom": "18.0.0",
@@ -15,7 +16,7 @@
     "roughjs": "^4.5.2"
   },
   "devDependencies": {
-    "react-scripts": "5.0.1"
+    "react-scripts": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

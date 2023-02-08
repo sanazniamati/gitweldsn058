@@ -165,7 +165,6 @@ const drawElement = (roughCanvas, context, element) => {
 const adjustmentRequired = (type) => ["line", "rectangle"].includes(type);
 const useHistory = (initialState) => {
   const [index, setIndex] = useState(0);
-
   const [history, setHistory] = useState([initialState]);
   const setState = (action, overwrite = false) => {
     const newState =
