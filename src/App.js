@@ -190,45 +190,17 @@ const App = () => {
   const [action, setAction] = useState("none");
   const [tool, setTool] = useState("text");
   const [selectedElement, setSelectedElement] = useState(null);
-  const textAreaRef = useRef();
 
   useLayoutEffect(() => {
     const canvas = document.getElementById("canvas");
     const context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
-
     const roughCanvas = rough.canvas(canvas);
-
     elements.forEach((element) => {
       if (action === "writing" && selectedElement.id === element.id) return;
       drawElement(roughCanvas, context, element);
     });
   }, [elements, action, selectedElement]);
-
-  useEffect(() => {
-    const undoRedoFunction = (event) => {
-      if ((event.metaKey || event.ctrlKey) && event.key === "z") {
-        if (event.shiftKey) {
-          redo();
-        } else {
-          undo();
-        }
-      }
-    };
-
-    document.addEventListener("keydown", undoRedoFunction);
-    return () => {
-      document.removeEventListener("keydown", undoRedoFunction);
-    };
-  }, [undo, redo]);
-
-  useEffect(() => {
-    const textArea = textAreaRef.current;
-    if (action === "writing") {
-      textArea.focus();
-      textArea.value = selectedElement.text;
-    }
-  }, [action, selectedElement]);
 
   const updateElement = (id, x1, y1, x2, y2, type, options) => {
     const elementsCopy = [...elements];
@@ -237,23 +209,6 @@ const App = () => {
       case "line":
       case "rectangle":
         elementsCopy[id] = createElement(id, x1, y1, x2, y2, type);
-        break;
-      case "pencil":
-        elementsCopy[id].points = [
-          ...elementsCopy[id].points,
-          { x: x2, y: y2 },
-        ];
-        break;
-      case "text":
-        const textWidth = document
-          .getElementById("canvas")
-          .getContext("2d")
-          .measureText(options.text).width;
-        const textHeight = 24;
-        elementsCopy[id] = {
-          ...createElement(id, x1, y1, x1 + textWidth, y1 + textHeight, type),
-          text: options.text,
-        };
         break;
       default:
         throw new Error(`Type not recognised: ${type}`);
@@ -387,13 +342,6 @@ const App = () => {
     setSelectedElement(null);
   };
 
-  const handleBlur = (event) => {
-    const { id, x1, y1, type } = selectedElement;
-    setAction("none");
-    setSelectedElement(null);
-    updateElement(id, x1, y1, null, null, type, { text: event.target.value });
-  };
-
   return (
     <div>
       <div style={{ position: "fixed" }}>
@@ -411,52 +359,12 @@ const App = () => {
           onChange={() => setTool("rectangle")}
         />
         <label htmlFor="rectangle">Rectangle</label>
-        {/*<input*/}
-        {/*  type="radio"*/}
-        {/*  id="selection"*/}
-        {/*  checked={tool === "selection"}*/}
-        {/*  onChange={() => setTool("selection")}*/}
-        {/*/>*/}
-        {/*<label htmlFor="selection">Selection</label>*/}
-        {/*<input*/}
-        {/*  type="radio"*/}
-        {/*  id="pencil"*/}
-        {/*  checked={tool === "pencil"}*/}
-        {/*  onChange={() => setTool("pencil")}*/}
-        {/*/>*/}
-        {/*<label htmlFor="pencil">Pencil</label>*/}
-        {/*<input*/}
-        {/*  type="radio"*/}
-        {/*  id="text"*/}
-        {/*  checked={tool === "text"}*/}
-        {/*  onChange={() => setTool("text")}*/}
-        {/*/>*/}
-        {/*<label htmlFor="text">Text</label>*/}
       </div>
       <div style={{ position: "fixed", bottom: 0, padding: 10 }}>
         <button onClick={undo}>Undo</button>
         <button onClick={redo}>Redo</button>
       </div>
-      {/*{action === "writing" ? (*/}
-      {/*  <textarea*/}
-      {/*    ref={textAreaRef}*/}
-      {/*    onBlur={handleBlur}*/}
-      {/*    style={{*/}
-      {/*      position: "fixed",*/}
-      {/*      top: selectedElement.y1 - 2,*/}
-      {/*      left: selectedElement.x1,*/}
-      {/*      font: "24px sans-serif",*/}
-      {/*      margin: 0,*/}
-      {/*      padding: 0,*/}
-      {/*      border: 0,*/}
-      {/*      outline: 0,*/}
-      {/*      resize: "auto",*/}
-      {/*      overflow: "hidden",*/}
-      {/*      whiteSpace: "pre",*/}
-      {/*      background: "transparent",*/}
-      {/*    }}*/}
-      {/*  />*/}
-      {/*) : null}*/}
+
       <canvas
         id="canvas"
         width={window.innerWidth}
