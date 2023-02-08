@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import rough from "roughjs/bundled/rough.esm";
 
 const generator = rough.generator();
@@ -195,20 +195,39 @@ const App = () => {
     const canvas = document.getElementById("canvas");
     const context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
+
     const roughCanvas = rough.canvas(canvas);
+
     elements.forEach((element) => {
       if (action === "writing" && selectedElement.id === element.id) return;
       drawElement(roughCanvas, context, element);
     });
   }, [elements, action, selectedElement]);
 
-  const updateElement = (id, x1, y1, x2, y2, type, options) => {
+   const updateElement = (id, x1, y1, x2, y2, type, options) => {
     const elementsCopy = [...elements];
 
     switch (type) {
       case "line":
       case "rectangle":
         elementsCopy[id] = createElement(id, x1, y1, x2, y2, type);
+        break;
+      case "pencil":
+        elementsCopy[id].points = [
+          ...elementsCopy[id].points,
+          { x: x2, y: y2 },
+        ];
+        break;
+      case "text":
+        const textWidth = document
+          .getElementById("canvas")
+          .getContext("2d")
+          .measureText(options.text).width;
+        const textHeight = 24;
+        elementsCopy[id] = {
+          ...createElement(id, x1, y1, x1 + textWidth, y1 + textHeight, type),
+          text: options.text,
+        };
         break;
       default:
         throw new Error(`Type not recognised: ${type}`);
@@ -342,9 +361,18 @@ const App = () => {
     setSelectedElement(null);
   };
 
+
+
   return (
     <div>
       <div style={{ position: "fixed" }}>
+        <input
+          type="radio"
+          id="selection"
+          checked={tool === "selection"}
+          onChange={() => setTool("selection")}
+        />
+        <label htmlFor="selection">Selection</label>
         <input
           type="radio"
           id="line"
@@ -359,6 +387,7 @@ const App = () => {
           onChange={() => setTool("rectangle")}
         />
         <label htmlFor="rectangle">Rectangle</label>
+
       </div>
       <div style={{ position: "fixed", bottom: 0, padding: 10 }}>
         <button onClick={undo}>Undo</button>
