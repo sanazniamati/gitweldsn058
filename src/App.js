@@ -1,6 +1,5 @@
 import React, { useLayoutEffect, useState } from "react";
 import rough from "roughjs/bundled/rough.esm";
-
 const generator = rough.generator();
 
 const createElement = (id, x1, y1, x2, y2, type) => {
@@ -12,10 +11,6 @@ const createElement = (id, x1, y1, x2, y2, type) => {
           ? generator.line(x1, y1, x2, y2)
           : generator.rectangle(x1, y1, x2 - x1, y2 - y1);
       return { id, x1, y1, x2, y2, type, roughElement };
-    case "pencil":
-      return { id, type, points: [{ x: x1, y: y1 }] };
-    case "text":
-      return { id, type, x1, y1, x2, y2, text: "" };
     default:
       throw new Error(`Type not recognised: ${type}`);
   }
@@ -48,17 +43,6 @@ const positionWithinElement = (x, y, element) => {
       const bottomRight = nearPoint(x, y, x2, y2, "br");
       const inside = x >= x1 && x <= x2 && y >= y1 && y <= y2 ? "inside" : null;
       return topLeft || topRight || bottomLeft || bottomRight || inside;
-    case "pencil":
-      const betweenAnyPoint = element.points.some((point, index) => {
-        const nextPoint = element.points[index + 1];
-        if (!nextPoint) return false;
-        return (
-          onLine(point.x, point.y, nextPoint.x, nextPoint.y, x, y, 5) != null
-        );
-      });
-      return betweenAnyPoint ? "inside" : null;
-    case "text":
-      return x >= x1 && x <= x2 && y >= y1 && y <= y2 ? "inside" : null;
     default:
       throw new Error(`Type not recognised: ${type}`);
   }
@@ -126,36 +110,11 @@ const resizedCoordinates = (clientX, clientY, position, coordinates) => {
   }
 };
 
-const getSvgPathFromStroke = (stroke) => {
-  if (!stroke.length) return "";
-
-  const d = stroke.reduce(
-    (acc, [x0, y0], i, arr) => {
-      const [x1, y1] = arr[(i + 1) % arr.length];
-      acc.push(x0, y0, (x0 + x1) / 2, (y0 + y1) / 2);
-      return acc;
-    },
-    ["M", ...stroke[0], "Q"]
-  );
-
-  d.push("Z");
-  return d.join(" ");
-};
-
 const drawElement = (roughCanvas, context, element) => {
   switch (element.type) {
     case "line":
     case "rectangle":
       roughCanvas.draw(element.roughElement);
-      break;
-    case "pencil":
-      const stroke = getSvgPathFromStroke(getStroke(element.points));
-      context.fill(new Path2D(stroke));
-      break;
-    case "text":
-      context.textBaseline = "top";
-      context.font = "24px sans-serif";
-      context.fillText(element.text, element.x1, element.y1);
       break;
     default:
       throw new Error(`Type not recognised: ${element.type}`);
@@ -188,7 +147,7 @@ const useHistory = (initialState) => {
 const App = () => {
   const [elements, setElements, undo, redo] = useHistory([]);
   const [action, setAction] = useState("none");
-  const [tool, setTool] = useState("text");
+  const [tool, setTool] = useState("");
   const [selectedElement, setSelectedElement] = useState(null);
 
   useLayoutEffect(() => {
@@ -203,42 +162,19 @@ const App = () => {
       drawElement(roughCanvas, context, element);
     });
   }, [elements, action, selectedElement]);
-
-   const updateElement = (id, x1, y1, x2, y2, type, options) => {
+  const updateElement = (id, x1, y1, x2, y2, type, options) => {
     const elementsCopy = [...elements];
-
     switch (type) {
       case "line":
       case "rectangle":
         elementsCopy[id] = createElement(id, x1, y1, x2, y2, type);
         break;
-      case "pencil":
-        elementsCopy[id].points = [
-          ...elementsCopy[id].points,
-          { x: x2, y: y2 },
-        ];
-        break;
-      case "text":
-        const textWidth = document
-          .getElementById("canvas")
-          .getContext("2d")
-          .measureText(options.text).width;
-        const textHeight = 24;
-        elementsCopy[id] = {
-          ...createElement(id, x1, y1, x1 + textWidth, y1 + textHeight, type),
-          text: options.text,
-        };
-        break;
       default:
         throw new Error(`Type not recognised: ${type}`);
     }
-
     setElements(elementsCopy, true);
   };
-
   const handleMouseDown = (event) => {
-    if (action === "writing") return;
-
     const { clientX, clientY } = event;
     if (tool === "selection") {
       const element = getElementAtPosition(clientX, clientY, elements);
@@ -270,23 +206,21 @@ const App = () => {
         clientY,
         tool
       );
-      setElements((prevState) => [...prevState, element]);
-      setSelectedElement(element);
 
-      setAction(tool === "text" ? "writing" : "drawing");
+      setElements((prevState) => [...prevState, element]);
+      console.log(element);
+      setSelectedElement(element);
+      setAction(tool === "line" || "rectangle"? "drawing":"none");
     }
   };
-
   const handleMouseMove = (event) => {
     const { clientX, clientY } = event;
-
     if (tool === "selection") {
       const element = getElementAtPosition(clientX, clientY, elements);
       event.target.style.cursor = element
         ? cursorForPosition(element.position)
         : "default";
     }
-
     if (action === "drawing") {
       const index = elements.length - 1;
       const { x1, y1 } = elements[index];
@@ -331,19 +265,8 @@ const App = () => {
       updateElement(id, x1, y1, x2, y2, type);
     }
   };
-
-  const handleMouseUp = (event) => {
-    const { clientX, clientY } = event;
+  const handleMouseUp = () => {
     if (selectedElement) {
-      if (
-        selectedElement.type === "text" &&
-        clientX - selectedElement.offsetX === selectedElement.x1 &&
-        clientY - selectedElement.offsetY === selectedElement.y1
-      ) {
-        setAction("writing");
-        return;
-      }
-
       const index = selectedElement.id;
       const { id, type } = elements[index];
       if (
@@ -354,15 +277,9 @@ const App = () => {
         updateElement(id, x1, y1, x2, y2, type);
       }
     }
-
-    if (action === "writing") return;
-
     setAction("none");
     setSelectedElement(null);
   };
-
-
-
   return (
     <div>
       <div style={{ position: "fixed" }}>
@@ -387,13 +304,11 @@ const App = () => {
           onChange={() => setTool("rectangle")}
         />
         <label htmlFor="rectangle">Rectangle</label>
-
       </div>
       <div style={{ position: "fixed", bottom: 0, padding: 10 }}>
         <button onClick={undo}>Undo</button>
         <button onClick={redo}>Redo</button>
       </div>
-
       <canvas
         id="canvas"
         width={window.innerWidth}
@@ -401,11 +316,8 @@ const App = () => {
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-      >
-        Canvas
-      </canvas>
+      />
     </div>
   );
 };
-
 export default App;
