@@ -290,13 +290,14 @@ const App = () => {
           onChange={() => setTool("selection")}
         />
         <label htmlFor="selection">Selection</label>
-        <input
-          type="radio"
-          id="line"
-          checked={tool === "line"}
-          onChange={() => setTool("line")}
-        />
-        <label htmlFor="line">Line</label>
+        <button onClick={() => setTool("line")}> CreateLine</button>
+        {/*<input*/}
+        {/*  type="radio"*/}
+        {/*  id="line"*/}
+        {/*  checked={tool === "line"}*/}
+        {/*  onChange={() => setTool("line")}*/}
+        {/*/>*/}
+        {/*<label htmlFor="line">Line</label>*/}
         <input
           type="radio"
           id="rectangle"
