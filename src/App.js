@@ -176,27 +176,27 @@ const App = () => {
   };
   const handleMouseDown = (event) => {
     const { clientX, clientY } = event;
-    if (tool === "selection") {
-      const element = getElementAtPosition(clientX, clientY, elements);
-      if (element) {
-        if (element.type === "pencil") {
-          const xOffsets = element.points.map((point) => clientX - point.x);
-          const yOffsets = element.points.map((point) => clientY - point.y);
-          setSelectedElement({ ...element, xOffsets, yOffsets });
-        } else {
-          const offsetX = clientX - element.x1;
-          const offsetY = clientY - element.y1;
-          setSelectedElement({ ...element, offsetX, offsetY });
-        }
-        setElements((prevState) => prevState);
-
-        if (element.position === "inside") {
-          setAction("moving");
-        } else {
-          setAction("resizing");
-        }
-      }
-    } else {
+    // if (tool === "selection") {
+    //   const element = getElementAtPosition(clientX, clientY, elements);
+    //   if (element) {
+    //     if (element.type === "pencil") {
+    //       const xOffsets = element.points.map((point) => clientX - point.x);
+    //       const yOffsets = element.points.map((point) => clientY - point.y);
+    //       setSelectedElement({ ...element, xOffsets, yOffsets });
+    //     } else {
+    //       const offsetX = clientX - element.x1;
+    //       const offsetY = clientY - element.y1;
+    //       setSelectedElement({ ...element, offsetX, offsetY });
+    //     }
+    //     setElements((prevState) => prevState);
+    //
+    //     if (element.position === "inside") {
+    //       setAction("moving");
+    //     } else {
+    //       setAction("resizing");
+    //     }
+    //   }
+    // } else {
       const id = elements.length;
       const element = createElement(
         id,
@@ -211,7 +211,7 @@ const App = () => {
       console.log(element);
       setSelectedElement(element);
       setAction(tool === "line" || "rectangle"? "drawing":"none");
-    }
+    // }
   };
   const handleMouseMove = (event) => {
     const { clientX, clientY } = event;

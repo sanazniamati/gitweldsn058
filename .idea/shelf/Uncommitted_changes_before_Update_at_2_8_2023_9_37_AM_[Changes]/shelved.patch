@@ -1,0 +1,142 @@
+Index: .idea/gitweldsn056.iml
+===================================================================
+diff --git a/.idea/gitweldsn056.iml b/.idea/gitweldsn056.iml
+deleted file mode 100644
+--- a/.idea/gitweldsn056.iml	(revision 63477357af292e4cf93f60d42e87c58730df24d9)
++++ /dev/null	(revision 63477357af292e4cf93f60d42e87c58730df24d9)
+@@ -1,12 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<module type="WEB_MODULE" version="4">
+-  <component name="NewModuleRootManager">
+-    <content url="file://$MODULE_DIR$">
+-      <excludeFolder url="file://$MODULE_DIR$/temp" />
+-      <excludeFolder url="file://$MODULE_DIR$/.tmp" />
+-      <excludeFolder url="file://$MODULE_DIR$/tmp" />
+-    </content>
+-    <orderEntry type="inheritedJdk" />
+-    <orderEntry type="sourceFolder" forTests="false" />
+-  </component>
+-</module>
+\ No newline at end of file
+Index: .idea/prettier.xml
+===================================================================
+diff --git a/.idea/prettier.xml b/.idea/prettier.xml
+deleted file mode 100644
+--- a/.idea/prettier.xml	(revision 63477357af292e4cf93f60d42e87c58730df24d9)
++++ /dev/null	(revision 63477357af292e4cf93f60d42e87c58730df24d9)
+@@ -1,6 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="PrettierConfiguration">
+-    <option name="myRunOnSave" value="true" />
+-  </component>
+-</project>
+\ No newline at end of file
+Index: .idea/.gitignore
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+deleted file mode 100644
+--- a/.idea/.gitignore	(revision 63477357af292e4cf93f60d42e87c58730df24d9)
++++ /dev/null	(revision 63477357af292e4cf93f60d42e87c58730df24d9)
+@@ -1,5 +0,0 @@
+-# Default ignored files
+-/shelf/
+-/workspace.xml
+-# Editor-based HTTP Client requests
+-/httpRequests/
+Index: src/index.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { useState } from \"react\";\r\nimport { createRoot } from \"react-dom/client\";\r\nimport { Stage, Layer, Rect, Text } from \"react-konva\";\r\nimport App from \"./App\"\r\n\r\nconst container = document.getElementById(\"root\");\r\nconst root = createRoot(container);\r\nroot.render(<App />);\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/index.js b/src/index.js
+--- a/src/index.js	(revision 63477357af292e4cf93f60d42e87c58730df24d9)
++++ b/src/index.js	(date 1675839601046)
+@@ -1,6 +1,6 @@
+-import React, { useState } from "react";
++
+ import { createRoot } from "react-dom/client";
+-import { Stage, Layer, Rect, Text } from "react-konva";
++
+ import App from "./App"
+ 
+ const container = document.getElementById("root");
+Index: package-lock.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/package-lock.json b/package-lock.json
+--- a/package-lock.json	(revision 63477357af292e4cf93f60d42e87c58730df24d9)
++++ b/package-lock.json	(date 1675838425609)
+@@ -1,11 +1,11 @@
+ {
+-  "name": "projectrk084",
++  "name": "projectrk059",
+   "version": "0.1.0",
+   "lockfileVersion": 2,
+   "requires": true,
+   "packages": {
+     "": {
+-      "name": "projectrk084",
++      "name": "projectrk059",
+       "version": "0.1.0",
+       "dependencies": {
+         "i": "^0.3.7",
+Index: package.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\r\n  \"name\": \"projectrk059\",\r\n  \"description\": \"React Konva redo undo\",\r\n  \"version\": \"0.1.0\",\r\n  \"keywords\": [\r\n    \"canvas\",\r\n    \"react\",\r\n    \"konva\"\r\n  ],\r\n  \"dependencies\": {\r\n    \"i\": \"^0.3.7\",\r\n    \"konva\": \"8.3.11\",\r\n    \"react\": \"18.0.0\",\r\n    \"react-dom\": \"18.0.0\",\r\n    \"react-konva\": \"^18.0.0-0\",\r\n    \"roughjs\": \"^4.5.2\"\r\n  },\r\n  \"devDependencies\": {\r\n    \"react-scripts\": \"^5.0.1\"\r\n  },\r\n  \"scripts\": {\r\n    \"start\": \"react-scripts start\",\r\n    \"build\": \"react-scripts build\",\r\n    \"test\": \"react-scripts test --env=jsdom\",\r\n    \"eject\": \"react-scripts eject\"\r\n  },\r\n  \"browserslist\": [\r\n    \">0.2%\",\r\n    \"not dead\",\r\n    \"not ie <= 11\",\r\n    \"not op_mini all\"\r\n  ]\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/package.json b/package.json
+--- a/package.json	(revision 63477357af292e4cf93f60d42e87c58730df24d9)
++++ b/package.json	(date 1675839773434)
+@@ -1,5 +1,5 @@
+ {
+-  "name": "projectrk059",
++  "name": "gitweldsn058",
+   "description": "React Konva redo undo",
+   "version": "0.1.0",
+   "keywords": [
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectModuleManager\">\r\n    <modules>\r\n      <module fileurl=\"file://$PROJECT_DIR$/.idea/gitweldsn055.iml\" filepath=\"$PROJECT_DIR$/.idea/gitweldsn055.iml\" />\r\n    </modules>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+--- a/.idea/modules.xml	(revision 63477357af292e4cf93f60d42e87c58730df24d9)
++++ b/.idea/modules.xml	(date 1675838741470)
+@@ -2,7 +2,7 @@
+ <project version="4">
+   <component name="ProjectModuleManager">
+     <modules>
+-      <module fileurl="file://$PROJECT_DIR$/.idea/gitweldsn055.iml" filepath="$PROJECT_DIR$/.idea/gitweldsn055.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/gitweldsn058.iml" filepath="$PROJECT_DIR$/.idea/gitweldsn058.iml" />
+     </modules>
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"VcsDirectoryMappings\">\r\n    <mapping directory=\"\" vcs=\"Git\" />\r\n    <mapping directory=\"$PROJECT_DIR$\" vcs=\"Git\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+--- a/.idea/vcs.xml	(revision 63477357af292e4cf93f60d42e87c58730df24d9)
++++ b/.idea/vcs.xml	(date 1675838741513)
+@@ -2,6 +2,5 @@
+ <project version="4">
+   <component name="VcsDirectoryMappings">
+     <mapping directory="" vcs="Git" />
+-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+   </component>
+ </project>
+\ No newline at end of file
